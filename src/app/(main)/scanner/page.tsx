@@ -105,11 +105,7 @@ function ScannerContent() {
 
   const handleHandoverSubmit = () => {
     const val = handoverInput.trim().toUpperCase();
-    if (val === ARTISAN_QR_CODE) {
-      setHandoverResult("success");
-    } else {
-      setHandoverResult("error");
-    }
+    setHandoverResult(val === ARTISAN_QR_CODE ? "success" : "error");
   };
 
   const handleReset = () => {
@@ -120,43 +116,60 @@ function ScannerContent() {
     setWeightKg("");
   };
 
-  return (
-    <div className="relative min-h-full pb-4">
-      <div className="px-4 pt-4 pb-4 space-y-4">
-        <div className="hero-panel section-panel overflow-hidden relative px-4 py-5">
-          <div className="absolute -top-10 -right-8 w-28 h-28 rounded-full bg-amber-500/16 blur-2xl" />
-          <div className="absolute -bottom-10 -left-8 w-28 h-28 rounded-full bg-cyan-500/12 blur-2xl" />
+  const TAB_ITEMS = [
+    { id: "scan",        label: "📷 AI Scan"     },
+    { id: "agreements",  label: "📜 Agreements"  },
+    { id: "handover",    label: "📲 QR Audit"    },
+  ];
 
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-1.5">
-              <ScanLine size={16} className="text-amber-800" />
-              <span className="section-kicker text-amber-800">LGU Officer Module</span>
+  return (
+    <div className="relative min-h-full">
+      <div className="px-5 pt-6 pb-8 space-y-4">
+
+        {/* ── HERO ── */}
+        <div className="hero-panel relative overflow-hidden px-5 py-6" style={{ borderRadius: 24 }}>
+          <div className="pointer-events-none absolute -top-10 -right-8 w-32 h-32 rounded-full bg-amber-400/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-8 -left-8 w-28 h-28 rounded-full bg-cyan-400/08 blur-3xl" />
+
+          <div className="page-header">
+            <div className="page-header-row">
+              <div className="page-header-content">
+                <div className="flex items-center gap-2">
+                  <ScanLine size={15} className="text-amber-700" />
+                  <p className="section-kicker" style={{ color: "#b45309" }}>LGU Officer Module</p>
+                </div>
+              </div>
+              <span
+                className="page-header-badge badge-pill text-[10px] font-bold"
+                style={{ background: "rgba(245,158,11,0.08)", color: "#b45309", border: "1.5px solid rgba(245,158,11,0.2)" }}
+              >
+                🏛️ Admin Only
+              </span>
             </div>
-            <span className="badge-pill bg-amber-200 text-amber-900 text-[10px] font-bold">
-              🏛️ Admin Only
-            </span>
+
+            <div className="mt-3">
+              <h1 className="section-title">AI waste scanner</h1>
+              <p className="section-copy">
+                Scan festival waste, verify manual weights, & audit QR handovers.
+              </p>
+            </div>
           </div>
 
-          <h1 className="section-title">AI waste scanner</h1>
-          <p className="section-copy mt-2 max-w-[28ch]">
-            Scan festival waste, verify manual weights, & audit QR handovers.
-          </p>
-
-          <div className="clay-input-inset flex p-1 bg-white/70 rounded-2xl mt-4">
-            {[
-              { id: "scan", label: "📷 AI Scan" },
-              { id: "agreements", label: "📜 Agreements" },
-              { id: "handover", label: "📲 QR Audit" },
-            ].map((t) => (
+          {/* Tab switcher */}
+          <div
+            className="flex p-1 rounded-2xl relative z-10 mt-6"
+            style={{ background: "rgba(241,245,249,0.8)", border: "1.5px solid rgba(226,232,240,0.8)" }}
+          >
+            {TAB_ITEMS.map((t) => (
               <button
                 key={t.id}
                 id={`scanner-tab-${t.id}`}
                 onClick={() => setTab(t.id as Tab)}
-                className="flex-1 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 capitalize cursor-pointer"
+                className="flex-1 py-2.5 text-[11px] font-extrabold rounded-[16px] transition-all duration-200 cursor-pointer"
                 style={{
                   background: tab === t.id ? "#ffffff" : "transparent",
-                  color: tab === t.id ? "#b45309" : "#78350f",
-                  boxShadow: tab === t.id ? "0 2px 8px rgba(180,83,9,0.15)" : "none",
+                  color:      tab === t.id ? "#b45309" : "#78350f",
+                  boxShadow:  tab === t.id ? "0 2px 8px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9)" : "none",
                 }}
               >
                 {t.label}
@@ -165,118 +178,110 @@ function ScannerContent() {
           </div>
         </div>
 
-        <div className="section-panel p-4">
+        {/* ── TAB CONTENT ── */}
+        <div className="section-panel px-5 py-5">
+
+          {/* SCAN TAB */}
           {tab === "scan" && (
             <div className="flex flex-col gap-4">
-              <div className="scan-viewport shadow-md">
+              {/* Camera viewport */}
+              <div className="scan-viewport rounded-[22px] border border-slate-700/30" style={{ minHeight: 200 }}>
                 <div className="scan-corner scan-corner-tl" />
                 <div className="scan-corner scan-corner-tr" />
                 <div className="scan-corner scan-corner-bl" />
                 <div className="scan-corner scan-corner-br" />
                 {scanPhase !== "idle" && <div className="scan-line" />}
 
-                <div className="text-center text-white p-5">
+                <div className="text-center text-white px-6 py-8">
                   {scanPhase === "idle" && (
-                    <>
-                      <Camera size={36} className="mx-auto mb-2 opacity-50" />
-                      <p className="text-xs opacity-80">
-                        Point Chromebook / Phone Camera at waste batch
+                    <div className="space-y-3">
+                      <Camera size={36} className="mx-auto opacity-40" />
+                      <p className="text-[12px] opacity-70 max-w-[200px] mx-auto leading-relaxed font-medium">
+                        Point camera at waste batch to classify
                       </p>
-                    </>
+                    </div>
                   )}
                   {scanPhase === "scanning" && (
-                    <>
-                      <div className="text-3xl mb-2 animate-bounce">📷</div>
-                      <p className="text-xs font-bold text-cyan-300">Capturing photo…</p>
-                    </>
+                    <div className="space-y-3">
+                      <div className="text-[32px] animate-bounce">📷</div>
+                      <p className="text-[12px] font-bold text-cyan-300">Capturing photo…</p>
+                    </div>
                   )}
                   {scanPhase === "inferring" && (
-                    <>
-                      <Loader2 size={36} className="mx-auto mb-2 animate-spin text-cyan-400" />
-                      <p className="text-xs font-bold text-cyan-300">
-                        Gemini Multimodal Vision Inferring…
-                      </p>
-                    </>
+                    <div className="space-y-3">
+                      <Loader2 size={34} className="mx-auto animate-spin text-cyan-400" />
+                      <p className="text-[12px] font-bold text-cyan-300">Gemini Multimodal Vision Inferring…</p>
+                    </div>
                   )}
                   {(scanPhase === "form" || scanPhase === "done") && aiResult && (
-                    <>
-                      <div className="text-3xl mb-1">🎯</div>
-                      <p className="font-extrabold text-xs text-cyan-300">
-                        Detected: {aiResult.material}
-                      </p>
-                      <p className="text-[10px] opacity-70 mt-0.5">
-                        Confidence: {(aiResult.confidence * 100).toFixed(0)}%
-                      </p>
-                    </>
+                    <div className="space-y-2">
+                      <div className="text-[32px]">🎯</div>
+                      <p className="font-extrabold text-[13px] text-cyan-300">Detected: {aiResult.material}</p>
+                      <p className="text-[11px] opacity-60">Confidence: {(aiResult.confidence * 100).toFixed(0)}%</p>
+                    </div>
                   )}
                 </div>
               </div>
 
+              {/* Start scan button */}
               {scanPhase === "idle" && (
                 <button
                   id="start-scan-btn"
                   onClick={handleStartScan}
-                  className="clay-button-primary w-full text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
-                  style={{ height: 48 }}
+                  className="clay-button-primary w-full text-[13px] font-bold flex items-center justify-center gap-2 cursor-pointer"
+                  style={{ height: 50 }}
                 >
                   <Camera size={16} />
                   Capture & Classify Waste Photo
                 </button>
               )}
 
+              {/* Form after scan */}
               {scanPhase === "form" && (
-                <div className="clay-card p-4 flex flex-col gap-3.5 bg-white">
+                <div className="clay-card px-5 py-5 flex flex-col gap-4">
                   {aiResult && (
-                    <div className="clay-card-sm p-3 bg-emerald-50 border border-emerald-200">
-                      <p className="text-xs font-bold text-emerald-800 mb-0.5">
-                        🤖 Gemini AI Classification Result
-                      </p>
-                      <p className="text-xs text-emerald-900">{aiResult.notes}</p>
+                    <div
+                      className="px-4 py-3.5 rounded-2xl"
+                      style={{ background: "rgba(209,250,229,0.5)", border: "1.5px solid rgba(52,211,153,0.25)" }}
+                    >
+                      <p className="text-[11px] font-bold text-emerald-800 mb-1">🤖 Gemini AI Classification Result</p>
+                      <p className="text-[12px] text-emerald-900 leading-relaxed font-medium">{aiResult.notes}</p>
                     </div>
                   )}
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Material Type (AI Suggested)
-                    </label>
+                  <ScanFormField label="Material Type (AI Suggested)">
                     <select
                       id="scan-material"
                       value={material}
                       onChange={(e) => setMaterial(e.target.value)}
-                      className="clay-input-inset w-full px-3 text-xs"
-                      style={{ height: 42 }}
+                      className="clay-input-inset w-full px-4 text-[13px] font-medium"
+                      style={{ height: 46 }}
                     >
-                      {MATERIAL_TYPES_ARRAY.map((m) => (
-                        <option key={m} value={m}>{m}</option>
-                      ))}
+                      {MATERIAL_TYPES_ARRAY.map((m) => <option key={m} value={m}>{m}</option>)}
                     </select>
-                  </div>
+                  </ScanFormField>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Condition (AI Suggested)
-                    </label>
+                  <ScanFormField label="Condition (AI Suggested)">
                     <div className="flex gap-2">
                       {CONDITIONS_ARRAY.map((c) => (
                         <button
                           key={c}
                           onClick={() => setCondition(c as "Excellent" | "Good" | "Fair")}
-                          className={`flex-1 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                            condition === c
-                              ? "bg-blue-600 text-white shadow-xs"
-                              : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                          }`}
+                          className="flex-1 py-2.5 rounded-full text-[12px] font-bold transition-all cursor-pointer"
+                          style={{
+                            background: condition === c ? "#2563eb" : "rgba(255,255,255,0.9)",
+                            color:      condition === c ? "#ffffff"  : "#64748b",
+                            border:     condition === c ? "none"     : "1.5px solid rgba(226,232,240,0.9)",
+                            boxShadow:  condition === c ? "0 4px 12px rgba(37,99,235,0.2)" : "0 1px 3px rgba(15,23,42,0.04)",
+                          }}
                         >
                           {c}
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </ScanFormField>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Weight (kg) <span className="text-rose-500">* Manual Entry Required</span>
-                    </label>
+                  <ScanFormField label={<>Weight (kg) <span className="text-rose-500">* Manual Entry Required</span></>}>
                     <input
                       id="scan-weight"
                       type="number"
@@ -285,35 +290,30 @@ function ScannerContent() {
                       placeholder="Enter weight in kg (e.g. 45.5)"
                       value={weightKg}
                       onChange={(e) => setWeightKg(e.target.value === "" ? "" : Number(e.target.value))}
-                      className="clay-input-inset w-full px-3 text-xs bg-amber-50/50 border-amber-200"
-                      style={{ height: 44 }}
+                      className="clay-input-inset w-full px-4 text-[13px] font-bold"
+                      style={{ height: 46, borderColor: "rgba(251,191,36,0.4)", background: "rgba(255,251,235,0.5)" }}
                     />
-                  </div>
+                  </ScanFormField>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Material Release Agreement ID
-                    </label>
+                  <ScanFormField label="Material Release Agreement ID">
                     <select
                       id="scan-agreement"
                       value={agreementId}
                       onChange={(e) => setAgreementId(e.target.value)}
-                      className="clay-input-inset w-full px-3 text-xs"
-                      style={{ height: 42 }}
+                      className="clay-input-inset w-full px-4 text-[13px] font-medium"
+                      style={{ height: 46 }}
                     >
                       {RELEASE_AGREEMENTS.map((a) => (
-                        <option key={a.id} value={a.id}>
-                          {a.id} — {a.festival}
-                        </option>
+                        <option key={a.id} value={a.id}>{a.id} — {a.festival}</option>
                       ))}
                     </select>
-                  </div>
+                  </ScanFormField>
 
                   <button
                     id="submit-batch-btn"
                     onClick={handleSubmitBatch}
-                    className="clay-button-eco w-full text-xs font-bold flex items-center justify-center gap-2 cursor-pointer mt-1"
-                    style={{ height: 48 }}
+                    className="clay-button-eco w-full text-[13px] font-bold flex items-center justify-center gap-2 cursor-pointer"
+                    style={{ height: 50 }}
                   >
                     <CheckCircle size={16} />
                     Record Batch to {LEDGER_LABEL}
@@ -321,20 +321,19 @@ function ScannerContent() {
                 </div>
               )}
 
+              {/* Done state */}
               {scanPhase === "done" && (
-                <div className="clay-card p-6 text-center bg-white">
-                  <div className="text-4xl mb-2">✅</div>
-                  <h3 className="font-extrabold text-base text-slate-900 mb-1">
-                    Batch Recorded Successfully!
-                  </h3>
-                  <p className="text-xs text-slate-500 mb-4">
+                <div className="clay-card px-5 py-8 text-center">
+                  <div className="text-[42px] mb-4">✅</div>
+                  <h3 className="font-extrabold text-[16px] text-slate-900 mb-2">Batch Recorded Successfully!</h3>
+                  <p className="text-[12.5px] text-slate-500 mb-6 leading-relaxed max-w-[260px] mx-auto font-medium">
                     Material batch pinned to map and logged with SHA-256 hash on {LEDGER_LABEL}.
                   </p>
                   <button
                     id="scan-again-btn"
                     onClick={handleReset}
-                    className="clay-button-primary px-6 text-xs font-bold"
-                    style={{ height: 42 }}
+                    className="clay-button-primary px-8 text-[13px] font-bold cursor-pointer"
+                    style={{ height: 46 }}
                   >
                     Scan Another Batch
                   </button>
@@ -343,96 +342,111 @@ function ScannerContent() {
             </div>
           )}
 
+          {/* AGREEMENTS TAB */}
           {tab === "agreements" && (
-            <div className="flex flex-col gap-3">
-              <div className="clay-card-sm p-3 bg-amber-50 border border-amber-200 flex items-start gap-2">
-                <FileCheck size={16} className="text-amber-800 shrink-0 mt-0.5" />
-                <p className="text-xs text-amber-900">
+            <div className="flex flex-col gap-4">
+              <div
+                className="flex items-start gap-3 px-4 py-3.5 rounded-2xl"
+                style={{ background: "rgba(254,243,199,0.6)", border: "1.5px solid rgba(252,211,77,0.4)" }}
+              >
+                <FileCheck size={15} className="text-amber-700 shrink-0 mt-0.5" />
+                <p className="text-[12px] text-amber-900 leading-relaxed font-medium">
                   <strong>Step 0 Legal Framework:</strong> Formal Material Release Agreements signed between LGUs, municipalities, & temple committees before collection begins.
                 </p>
               </div>
 
               {RELEASE_AGREEMENTS.map((ag) => (
-                <div key={ag.id} className="clay-card p-3.5 bg-white">
-                  <div className="flex items-start justify-between mb-1">
-                    <h3 className="font-bold text-xs text-slate-900">
-                      {ag.title}
-                    </h3>
-                    <span className="badge-pill badge-eco text-[9px]">
-                      {ag.status}
-                    </span>
+                <div key={ag.id} className="clay-card px-5 py-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="font-extrabold text-[13.5px] text-slate-900 leading-snug flex-1">{ag.title}</h3>
+                    <span className="badge-pill badge-eco shrink-0">{ag.status}</span>
                   </div>
-                  <p className="text-[11px] text-slate-500 mb-2">
+                  <p className="text-[11.5px] text-slate-500 font-medium">
                     Partner: {ag.organizerName} ({ag.festival}, {ag.country})
                   </p>
-                  <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden mb-1">
-                    <div
-                      className="bg-amber-500 h-full rounded-full"
-                      style={{ width: `${Math.min(100, (ag.collectedKg / ag.allocatedKg) * 100)}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between text-[10px] text-slate-500 font-semibold">
-                    <span>Collected: {ag.collectedKg} kg</span>
-                    <span>Allocated Cap: {ag.allocatedKg} kg</span>
+
+                  {/* Progress bar */}
+                  <div>
+                    <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: "rgba(226,232,240,0.8)" }}>
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${Math.min(100, (ag.collectedKg / ag.allocatedKg) * 100)}%`,
+                          background: "linear-gradient(90deg, #f59e0b, #f97316)",
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-[10.5px] text-slate-500 font-bold pt-2">
+                      <span>Collected: {ag.collectedKg} kg</span>
+                      <span>Cap: {ag.allocatedKg} kg</span>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
 
+          {/* HANDOVER TAB */}
           {tab === "handover" && (
-            <div className="flex flex-col gap-3.5">
-              <div className="clay-card-sm p-3 bg-blue-50 border border-blue-200 flex items-start gap-2">
-                <AlertTriangle size={16} className="text-blue-600 shrink-0 mt-0.5" />
-                <p className="text-xs text-blue-900">
+            <div className="flex flex-col gap-4">
+              <div
+                className="flex items-start gap-3 px-4 py-3.5 rounded-2xl"
+                style={{ background: "rgba(219,234,254,0.5)", border: "1.5px solid rgba(147,197,253,0.4)" }}
+              >
+                <AlertTriangle size={15} className="text-blue-600 shrink-0 mt-0.5" />
+                <p className="text-[12px] text-blue-900 leading-relaxed font-medium">
                   <strong>Handover Protocol:</strong> LGU Officer scans Artisan's hardcoded QR code (<code className="font-bold text-blue-700">ART-12345</code>) to confirm physical custody transfer.
                 </p>
               </div>
 
-              <div className="clay-card p-4 bg-white text-center">
-                <div className="scan-viewport mb-3" style={{ minHeight: 150 }}>
+              {/* Scan viewport */}
+              <div className="clay-card px-5 py-5 flex flex-col gap-4 text-center">
+                <div className="scan-viewport rounded-[18px]" style={{ minHeight: 150 }}>
                   <div className="scan-corner scan-corner-tl" />
                   <div className="scan-corner scan-corner-tr" />
                   <div className="scan-corner scan-corner-bl" />
                   <div className="scan-corner scan-corner-br" />
                   <div className="scan-line" />
-                  <div className="text-center text-white">
-                    <QrCode size={32} className="mx-auto mb-1 opacity-50" />
-                    <p className="text-[11px] opacity-70">Camera Viewport Scanning Artisan QR</p>
+                  <div className="text-white text-center">
+                    <QrCode size={28} className="mx-auto mb-1.5 opacity-40 animate-pulse" />
+                    <p className="text-[10.5px] opacity-60 font-medium">Camera Viewport Scanning Artisan QR</p>
                   </div>
                 </div>
 
-                <p className="text-xs font-bold text-slate-700 mb-2">
-                  Type or Paste Artisan QR Code:
-                </p>
-                <div className="flex gap-2">
-                  <input
-                    id="handover-qr-input"
-                    type="text"
-                    placeholder="e.g. ART-12345"
-                    value={handoverInput}
-                    onChange={(e) => setHandoverInput(e.target.value.toUpperCase())}
-                    className="clay-input-inset flex-1 px-3 text-xs"
-                    style={{ height: 42 }}
-                  />
-                  <button
-                    id="handover-submit-btn"
-                    onClick={handleHandoverSubmit}
-                    className="clay-button-primary px-4 text-xs font-bold shrink-0 cursor-pointer"
-                    style={{ height: 42 }}
-                  >
-                    Verify QR
-                  </button>
+                <div className="text-left">
+                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.12em] mb-2">
+                    Type or Paste Artisan QR Code:
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      id="handover-qr-input"
+                      type="text"
+                      placeholder="e.g. ART-12345"
+                      value={handoverInput}
+                      onChange={(e) => setHandoverInput(e.target.value.toUpperCase())}
+                      className="clay-input-inset flex-1 px-4 text-[13px] font-bold"
+                      style={{ height: 46 }}
+                    />
+                    <button
+                      id="handover-submit-btn"
+                      onClick={handleHandoverSubmit}
+                      className="clay-button-primary px-5 text-[13px] font-bold shrink-0 cursor-pointer"
+                      style={{ height: 46 }}
+                    >
+                      Verify
+                    </button>
+                  </div>
                 </div>
 
                 {handoverResult === "success" && (
-                  <div className="mt-3 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-left flex items-center gap-2">
-                    <CheckCircle size={18} className="text-emerald-600 shrink-0" />
+                  <div
+                    className="flex items-start gap-3 px-4 py-3.5 rounded-2xl text-left"
+                    style={{ background: "rgba(209,250,229,0.5)", border: "1.5px solid rgba(52,211,153,0.3)" }}
+                  >
+                    <CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-bold text-xs text-emerald-900">
-                        ✅ Artisan Handover Verified!
-                      </p>
-                      <p className="text-[10px] text-emerald-700">
+                      <p className="font-extrabold text-[12.5px] text-emerald-900">✅ Artisan Handover Verified!</p>
+                      <p className="text-[11.5px] text-emerald-700 font-medium mt-0.5 leading-snug">
                         Custody transferred to Priya Mehta. Logged to {LEDGER_LABEL}.
                       </p>
                     </div>
@@ -440,13 +454,14 @@ function ScannerContent() {
                 )}
 
                 {handoverResult === "error" && (
-                  <div className="mt-3 p-3 rounded-xl bg-rose-50 border border-rose-200 text-left flex items-center gap-2">
-                    <AlertTriangle size={18} className="text-rose-600 shrink-0" />
+                  <div
+                    className="flex items-start gap-3 px-4 py-3.5 rounded-2xl text-left"
+                    style={{ background: "rgba(255,228,230,0.5)", border: "1.5px solid rgba(251,113,133,0.3)" }}
+                  >
+                    <AlertTriangle size={16} className="text-rose-600 shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-bold text-xs text-rose-900">
-                        ❌ Invalid QR Code
-                      </p>
-                      <p className="text-[10px] text-rose-700">
+                      <p className="font-extrabold text-[12.5px] text-rose-900">❌ Invalid QR Code</p>
+                      <p className="text-[11.5px] text-rose-700 font-medium mt-0.5">
                         Test code is <code className="font-bold">ART-12345</code>.
                       </p>
                     </div>
@@ -454,14 +469,18 @@ function ScannerContent() {
                 )}
               </div>
 
-              <div className="clay-card p-3.5 bg-white text-center">
-                <p className="text-xs font-bold text-slate-600 mb-2">
+              {/* Reference QR */}
+              <div className="clay-card px-5 py-5 flex flex-col items-center gap-3">
+                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.12em]">
                   Reference Artisan Test QR Code:
                 </p>
-                <div className="flex justify-center p-3 bg-slate-50 rounded-xl w-32 h-32 mx-auto mb-2 border border-slate-200">
-                  <QRCodeSVG value={ARTISAN_QR_CODE} size={104} />
+                <div
+                  className="w-[140px] h-[140px] flex items-center justify-center rounded-2xl border border-slate-200"
+                  style={{ background: "#f8fafc", padding: 12 }}
+                >
+                  <QRCodeSVG value={ARTISAN_QR_CODE} size={116} />
                 </div>
-                <p className="mono-tech text-xs">{ARTISAN_QR_CODE}</p>
+                <p className="mono-tech text-[10.5px] text-slate-400 select-all font-bold">{ARTISAN_QR_CODE}</p>
               </div>
             </div>
           )}
@@ -471,10 +490,19 @@ function ScannerContent() {
       {toast && (
         <div className="toast-container">
           <div className="toast">
-            <span className="text-xs font-bold text-slate-800">{toast}</span>
+            <span className="text-[12.5px] font-bold text-slate-800">{toast}</span>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function ScanFormField({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.12em]">{label}</label>
+      {children}
     </div>
   );
 }

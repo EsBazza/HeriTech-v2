@@ -4,9 +4,8 @@ import { useAuthStore } from "@/stores/authStore";
 import { useProductStore } from "@/stores/productStore";
 import { useBatchStore } from "@/stores/batchStore";
 import type { Role } from "@/lib/types";
-import { ESCROW_SPLIT, ARTISAN_QR_CODE } from "@/lib/constants";
+import { ARTISAN_QR_CODE } from "@/lib/constants";
 import {
-  User,
   ShoppingBag,
   Palette,
   QrCode,
@@ -19,21 +18,21 @@ import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 
 const ROLE_COLORS: Record<Role, string> = {
-  buyer: "#2563eb",
-  artisan: "#ef4444",
-  lgu: "#f59e0b",
+  buyer:   "#2563eb",
+  artisan: "#f43f5e",
+  lgu:     "#f59e0b",
 };
 
 const ROLE_EMOJIS: Record<Role, string> = {
-  buyer: "🛍️",
+  buyer:   "🛍️",
   artisan: "🎨",
-  lgu: "🏛️",
+  lgu:     "🏛️",
 };
 
 const ROLE_LABELS: Record<Role, string> = {
-  buyer: "Buyer (Consumer)",
-  artisan: "Verified Artisan", 
-  lgu: "LGU Officer / Admin",
+  buyer:   "Buyer (Consumer)",
+  artisan: "Verified Artisan",
+  lgu:     "LGU Officer / Admin",
 };
 
 export default function ProfilePage() {
@@ -41,57 +40,70 @@ export default function ProfilePage() {
   const { orders, products } = useProductStore();
   const { batches } = useBatchStore();
 
-  const userOrders = orders.filter((o) => o.buyerId === user.id);
+  const userOrders   = orders.filter((o) => o.buyerId === user.id);
   const userProducts = products.filter((p) => p.artisanId === user.id);
-  const userBatches = batches.filter((b) => b.scannedByOfficerId === user.id);
+  const userBatches  = batches.filter((b) => b.scannedByOfficerId === user.id);
 
   return (
-    <div className="relative min-h-full pb-4">
-      <div className="px-4 pt-4 pb-4 space-y-4">
-        <div className="hero-panel section-panel overflow-hidden relative px-4 py-5">
-          <div className="absolute -top-10 -right-8 w-28 h-28 rounded-full blur-2xl" style={{ background: `${ROLE_COLORS[role]}22` }} />
-          <div className="absolute -bottom-10 -left-8 w-28 h-28 rounded-full bg-blue-500/12 blur-2xl" />
+    <div className="mobile-page">
+      <div className="mobile-header">
+        {/* ── PROFILE HERO ── */}
+        <div className="page-hero" style={{ 
+          background: `linear-gradient(135deg, ${ROLE_COLORS[role]}08, ${ROLE_COLORS[role]}04)`,
+          backdropFilter: "blur(20px)",
+          border: "1px solid rgba(226,232,240,0.7)"
+        }}>
+          <div
+            className="pointer-events-none absolute -top-10 -right-8 w-32 h-32 rounded-full blur-3xl"
+            style={{ background: `${ROLE_COLORS[role]}12` }}
+          />
 
-          <div className="flex items-center gap-3.5 relative z-10">
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0"
-              style={{ background: ROLE_COLORS[role], color: "white", boxShadow: "0 16px 28px rgba(15,23,42,0.16)" }}
-            >
-              {ROLE_EMOJIS[role]}
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <p className="section-kicker mb-1 text-slate-500">
-                Demo Profile
-              </p>
-              <h1 className="section-title truncate">{user.name}</h1>
-              <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+          <div className="hero-header relative z-10">
+            <div className="hero-main">
+              <div
+                className="w-16 h-16 rounded-xl flex items-center justify-center text-3xl"
+                style={{
+                  background: ROLE_COLORS[role],
+                  boxShadow: `0 4px 16px ${ROLE_COLORS[role]}40`,
+                }}
+              >
+                {ROLE_EMOJIS[role]}
+              </div>
+              <div className="hero-text">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                  Demo Profile
+                </p>
+                <h1 className="section-title mb-2">{user.name}</h1>
                 <span
-                  className="badge-pill text-[10px]"
+                  className="mobile-badge"
                   style={{
-                    background: `${ROLE_COLORS[role]}20`,
+                    background: `${ROLE_COLORS[role]}10`,
                     color: ROLE_COLORS[role],
-                    border: `1px solid ${ROLE_COLORS[role]}40`,
+                    border: `1px solid ${ROLE_COLORS[role]}25`,
                   }}
                 >
                   {ROLE_LABELS[role]}
                 </span>
               </div>
-              {role === "artisan" && (
-                <p className="text-[11px] text-slate-600 mt-2 font-semibold">
-                  📍 {user.workshopName ?? "Lotus Craft Studio"}
-                </p>
-              )}
-              {role === "lgu" && (
-                <p className="text-[11px] text-slate-600 mt-2 font-semibold">
-                  📍 {user.stationName ?? "Chiang Mai Heritage Station"}
-                </p>
-              )}
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-3 gap-2.5">
+          {role === "artisan" && (
+            <p className="text-sm text-slate-600 relative z-10">
+              📍 {user.workshopName ?? "Lotus Craft Studio"}
+            </p>
+          )}
+          {role === "lgu" && (
+            <p className="text-sm text-slate-600 relative z-10">
+              📍 {user.stationName ?? "Chiang Mai Heritage Station"}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="mobile-content">
+        {/* ── STAT CARDS ── */}
+        <div className="grid grid-cols-3 gap-3">
           {role === "buyer" && (
             <>
               <StatCard icon="🛍️" label="Orders" value={userOrders.length} />
@@ -115,89 +127,91 @@ export default function ProfilePage() {
           )}
         </div>
 
+        {/* ── ARTISAN QR ── */}
         {role === "artisan" && (
-          <div className="section-panel p-4 text-center">
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-bold text-xs text-slate-900 flex items-center gap-1.5">
-                <QrCode size={16} className="text-rose-500" /> Artisan Handover QR Code
+          <div className="mobile-card space-y-5">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-2 font-bold text-sm text-slate-900">
+                <QrCode size={16} className="text-rose-500" /> Artisan Handover QR
               </span>
-              <span className="badge-pill badge-artisan text-[9px]">Show to LGU</span>
+              <span className="mobile-badge mobile-badge-artisan">Show to LGU</span>
             </div>
-            <p className="text-[11px] text-slate-500 mb-3">
+            <p className="text-sm text-slate-600 leading-relaxed">
               Show this QR code to the LGU Officer when picking up waste batches to verify physical custody transfer.
             </p>
-
-            <div className="p-3 bg-slate-50 rounded-2xl w-36 h-36 mx-auto mb-2 border border-slate-200 flex items-center justify-center">
-              <QRCodeSVG value={ARTISAN_QR_CODE} size={116} />
+            <div className="flex justify-center">
+              <div className="w-36 h-36 bg-white rounded-xl border border-slate-200 flex items-center justify-center p-3">
+                <QRCodeSVG value={ARTISAN_QR_CODE} size={120} />
+              </div>
             </div>
-            <p className="mono-tech text-xs text-rose-600 font-bold">{ARTISAN_QR_CODE}</p>
-
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-3 flex-wrap">
-              <span className="text-xs text-slate-600 font-semibold">Artisan Studio</span>
-              <Link href="/studio" className="clay-button-artisan px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5">
+            <p className="text-center font-mono text-xs font-bold text-rose-600 select-all">
+              {ARTISAN_QR_CODE}
+            </p>
+            <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+              <span className="text-sm font-semibold text-slate-600">Artisan Studio</span>
+              <Link href="/studio" className="mobile-btn mobile-btn-artisan mobile-btn-small">
                 <Palette size={14} /> Open Studio
               </Link>
             </div>
           </div>
         )}
 
+        {/* ── LGU STATIONS ── */}
         {role === "lgu" && (
-          <div className="section-panel p-4">
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-bold text-xs text-slate-900 flex items-center gap-1.5">
-                <Award size={16} className="text-amber-600" /> Station Management
+          <div className="mobile-card space-y-5">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-2 font-bold text-sm text-slate-900">
+                <Award size={16} className="text-amber-500" /> Station Management
               </span>
-              <Link href="/scanner" className="clay-button-primary px-3 py-2 text-xs font-bold inline-flex items-center gap-1.5 min-h-[32px]">
+              <Link href="/scanner" className="mobile-btn mobile-btn-primary mobile-btn-small">
                 + AI Scan
               </Link>
             </div>
-
-            <div className="flex flex-col gap-2">
+            <div className="space-y-3">
               {[
                 { label: "Chiang Mai Station", sub: "8,500 kg Allocated · Active", icon: "🏛️" },
                 { label: "Thane Nirmalaya Station", sub: "150,000 kg Allocated · Active", icon: "🪷" },
               ].map((s) => (
-                <div key={s.label} className="clay-card-sm p-3 flex items-center justify-between bg-slate-50">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{s.icon}</span>
-                    <div>
-                      <p className="font-bold text-xs text-slate-900">{s.label}</p>
-                      <p className="text-[10px] text-slate-500">{s.sub}</p>
-                    </div>
+                <div key={s.label} className="mobile-card-compact flex items-center gap-3">
+                  <span className="text-2xl">{s.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm text-slate-900">{s.label}</p>
+                    <p className="text-xs text-slate-600 mt-1">{s.sub}</p>
                   </div>
-                  <span className="badge-pill badge-eco text-[9px]">Verified</span>
+                  <span className="mobile-badge mobile-badge-eco">Verified</span>
                 </div>
               ))}
             </div>
           </div>
         )}
 
+        {/* ── BUYER PURCHASES ── */}
         {role === "buyer" && (
-          <div className="section-panel p-4">
-            <h2 className="font-bold text-xs text-slate-900 mb-3 flex items-center gap-1.5">
-              <ShoppingBag size={16} className="text-blue-600" /> My Purchases & HeriTech Impact Passes
+          <div className="mobile-card space-y-5">
+            <h2 className="flex items-center gap-2 font-bold text-sm text-slate-900">
+              <ShoppingBag size={16} className="text-blue-600" />
+              My Purchases & Impact Passes
             </h2>
-
             {userOrders.length === 0 ? (
-              <div className="text-center py-6">
-                <Sparkles size={28} className="mx-auto mb-1 text-slate-300" />
-                <p className="text-xs text-slate-500 font-medium">No purchases yet.</p>
-                <Link href="/" className="text-xs text-blue-600 font-bold mt-1 inline-block">
+              <div className="text-center py-8">
+                <Sparkles size={28} className="mx-auto mb-3 text-slate-300" />
+                <p className="text-sm text-slate-600 font-semibold mb-2">No purchases yet.</p>
+                <Link href="/" className="text-sm text-blue-600 font-bold">
                   Browse Festival Marketplace →
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-col gap-2">
+              <div className="space-y-3">
                 {userOrders.map((order) => (
-                  <div key={order.id} className="clay-card-sm p-3 flex items-center justify-between bg-slate-50">
+                  <div key={order.id} className="mobile-card-compact flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-bold text-slate-900">{order.id}</p>
-                      <p className="text-[10px] text-slate-500">
+                      <p className="text-sm font-semibold text-slate-900">{order.id}</p>
+                      <p className="text-xs text-slate-600 mt-1">
                         {new Date(order.purchasedAt).toLocaleDateString()} · Wallet Pass Issued
                       </p>
                     </div>
-                    <span className="badge-pill badge-eco text-[9px] flex items-center gap-1">
-                      <CheckCircle size={10} /> Pass Verified
+                    <span className="mobile-badge mobile-badge-eco flex items-center gap-1">
+                      <CheckCircle size={12} /> Verified
                     </span>
                   </div>
                 ))}
@@ -206,39 +220,50 @@ export default function ProfilePage() {
           </div>
         )}
 
-        <div className="section-panel p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-              <RefreshCw size={14} className="text-blue-600" /> Switch Active Role
+        {/* ── ROLE SWITCHER ── */}
+        <div className="mobile-card space-y-5">
+          <div className="flex items-center justify-between">
+            <h2 className="flex items-center gap-2 font-bold text-sm text-slate-900">
+              <RefreshCw size={14} className="text-blue-600" />
+              Switch Active Role
             </h2>
-            <span className="text-[10px] font-bold text-slate-400">Strict Permissions Matrix</span>
+            <span className="text-xs font-semibold text-slate-500">Demo Permissions</span>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="space-y-3">
             {(["buyer", "artisan", "lgu"] as Role[]).map((r) => (
               <button
                 key={r}
-                id={`switch-role-${r}`}
                 onClick={() => switchRole(r)}
-                className={`flex items-center justify-between p-3 rounded-2xl transition-all cursor-pointer ${
-                  role === r
-                    ? "bg-blue-50 border-2 border-blue-600 shadow-xs"
-                    : "bg-slate-50 border border-slate-200 hover:bg-slate-100"
+                className={`w-full flex items-center justify-between p-4 rounded-xl transition-all border ${
+                  role === r 
+                    ? 'border-2 bg-opacity-5' 
+                    : 'border border-slate-200 bg-white hover:bg-slate-50'
                 }`}
-                style={{ minHeight: 44 }}
+                style={{
+                  borderColor: role === r ? ROLE_COLORS[r] : undefined,
+                  backgroundColor: role === r ? `${ROLE_COLORS[r]}05` : undefined,
+                }}
               >
-                <div className="flex items-center gap-2.5">
-                  <span className="text-lg">{ROLE_EMOJIS[r]}</span>
-                  <div className="text-left">
-                    <p className={`text-xs font-extrabold ${role === r ? "text-blue-700" : "text-slate-700"}`}>
-                      {ROLE_LABELS[r]}
-                    </p>
-                  </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{ROLE_EMOJIS[r]}</span>
+                  <p className={`text-sm font-bold ${role === r ? 'text-slate-900' : 'text-slate-700'}`}>
+                    {ROLE_LABELS[r]}
+                  </p>
                 </div>
                 {role === r ? (
-                  <span className="badge-pill badge-primary text-[9px]">Active Role</span>
+                  <span
+                    className="mobile-badge"
+                    style={{
+                      background: `${ROLE_COLORS[r]}12`,
+                      color: ROLE_COLORS[r],
+                      border: `1px solid ${ROLE_COLORS[r]}30`,
+                    }}
+                  >
+                    Active
+                  </span>
                 ) : (
-                  <span className="text-xs text-slate-400 font-bold">Switch →</span>
+                  <span className="text-sm text-slate-500 font-semibold">Switch →</span>
                 )}
               </button>
             ))}
@@ -249,22 +274,12 @@ export default function ProfilePage() {
   );
 }
 
-function StatCard({
-  icon,
-  label,
-  value,
-}: {
-  icon: string;
-  label: string;
-  value: string | number;
-}) {
+function StatCard({ icon, label, value }: { icon: string; label: string; value: string | number }) {
   return (
-    <div className="route-stat p-2.5 text-center rounded-2xl">
-      <div className="text-lg mb-0.5">{icon}</div>
-      <div className="text-sm font-extrabold text-slate-900">{value}</div>
-      <div className="text-[9px] font-semibold text-slate-500 uppercase tracking-tight">
-        {label}
-      </div>
+    <div className="stat-card">
+      <span className="text-xl">{icon}</span>
+      <span className="stat-value text-slate-900">{value}</span>
+      <span className="stat-label">{label}</span>
     </div>
   );
 }

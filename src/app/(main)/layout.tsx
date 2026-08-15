@@ -4,6 +4,7 @@ import { Wifi, Signal, Battery } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "HeriTech — Mobile Prototype",
+  description: "Heritage craft marketplace with verifiable provenance",
 };
 
 export default function MainLayout({
@@ -12,41 +13,53 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className="app-shell-backdrop min-h-screen w-full flex items-center justify-center p-0 sm:px-4 sm:py-4"
-    >
+    <div className="app-shell-backdrop min-h-screen w-full flex items-center justify-center p-0 sm:px-4 sm:py-6">
       <div
-        className="w-full max-w-[430px] min-h-[100dvh] sm:min-h-[900px] sm:max-h-[94vh] flex flex-col relative overflow-hidden sm:rounded-[42px] soft-panel"
+        className="w-full max-w-[430px] min-h-[100dvh] sm:min-h-[900px] sm:max-h-[94vh] flex flex-col relative overflow-hidden sm:rounded-[44px] soft-panel"
         style={{
           boxShadow:
-            "0 28px 72px -18px rgba(37, 99, 235, 0.22), 0 18px 42px -18px rgba(15, 23, 42, 0.16), 0 0 0 10px rgba(255,255,255,0.7)",
+            "0 0 0 10px rgba(255,255,255,0.65), 0 24px 64px -16px rgba(37,99,235,0.20), 0 16px 40px -12px rgba(15,23,42,0.14)",
         }}
       >
-        <div className="w-full pt-3 px-5 pb-2 flex items-center justify-between z-50 select-none bg-white/25 backdrop-blur-md border-b border-white/40">
-          <span className="text-[10px] font-extrabold tracking-[0.3em] text-slate-600 uppercase">
-            Demo Mode
+        {/* ── Status Bar ── */}
+        <div className="w-full pt-5 px-7 pb-2 flex items-center justify-between z-50 select-none shrink-0"
+          style={{ 
+            background: "rgba(255,255,255,0.8)", 
+            backdropFilter: "blur(20px)", 
+            borderBottom: "1px solid rgba(226,232,240,0.3)" 
+          }}
+        >
+          <span className="text-[10px] font-bold tracking-[0.18em] text-slate-400 uppercase">
+            Demo
           </span>
 
-          <div className="w-28 h-5 rounded-full bg-slate-950 flex items-center justify-center px-2 shadow-[inset_0_1px_2px_rgba(255,255,255,0.14)]">
-            <div className="w-2.5 h-2.5 rounded-full bg-cyan-400/80 mr-1.5" />
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          {/* Dynamic island */}
+          <div className="w-[88px] h-[22px] rounded-full bg-[#0a0a0a] flex items-center justify-center gap-2 px-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-700 ring-1 ring-slate-800 flex items-center justify-center">
+              <div className="w-0.5 h-0.5 rounded-full bg-blue-400/70" />
+            </div>
+            <div className="w-3 h-3 rounded-full bg-slate-800 ring-1 ring-slate-700" />
           </div>
 
-          <div className="flex items-center gap-1.5 text-slate-700">
-            <Signal size={12} strokeWidth={2.5} />
-            <Wifi size={12} strokeWidth={2.5} />
-            <Battery size={13} strokeWidth={2.5} className="fill-slate-700" />
+          <div className="flex items-center gap-1.5 text-slate-500">
+            <Signal size={10} strokeWidth={2.5} />
+            <Wifi size={10} strokeWidth={2.5} />
+            <Battery size={12} strokeWidth={2.5} />
           </div>
         </div>
 
-        <main className="flex-1 overflow-y-auto pb-28 relative bg-[linear-gradient(180deg,rgba(255,255,255,0.28),rgba(255,255,255,0.08))] scroll-smooth no-scrollbar">
+        {/* ── Main scrollable area ── */}
+        <main className="flex-1 overflow-y-auto pb-24 relative no-scrollbar"
+          style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%)" }}
+        >
           {children}
         </main>
 
+        {/* ── Bottom nav + home indicator ── */}
         <div className="absolute bottom-0 left-0 right-0 z-50">
           <BottomNav />
-          <div className="w-full pb-1 pt-1 flex justify-center bg-transparent">
-            <div className="w-28 h-1 bg-slate-400/45 rounded-full" />
+          <div className="w-full pb-2 pt-2 flex justify-center" style={{ background: "rgba(255,255,255,0.9)" }}>
+            <div className="w-24 h-[4px] bg-slate-300/70 rounded-full" />
           </div>
         </div>
       </div>
