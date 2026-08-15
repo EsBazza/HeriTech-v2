@@ -103,7 +103,7 @@ export default function ProfilePage() {
 
       <div className="mobile-content">
         {/* ── STAT CARDS ── */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}>
           {role === "buyer" && (
             <>
               <StatCard icon="🛍️" label="Orders" value={userOrders.length} />
@@ -144,11 +144,11 @@ export default function ProfilePage() {
                 <QRCodeSVG value={ARTISAN_QR_CODE} size={120} />
               </div>
             </div>
-            <p className="text-center font-mono text-xs font-bold text-rose-600 select-all">
+            <p className="text-center font-mono text-[11px] font-bold text-rose-600 select-all break-all leading-relaxed">
               {ARTISAN_QR_CODE}
             </p>
-            <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-              <span className="text-sm font-semibold text-slate-600">Artisan Studio</span>
+            <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-200">
+              <span className="text-sm font-semibold text-slate-600 truncate">Artisan Studio</span>
               <Link href="/studio" className="mobile-btn mobile-btn-artisan mobile-btn-small">
                 <Palette size={14} /> Open Studio
               </Link>
@@ -277,7 +277,7 @@ export default function ProfilePage() {
 function StatCard({ icon, label, value }: { icon: string; label: string; value: string | number }) {
   return (
     <div className="stat-card">
-      <span className="text-xl">{icon}</span>
+      <span className="text-lg leading-none">{icon}</span>
       <span className="stat-value text-slate-900">{value}</span>
       <span className="stat-label">{label}</span>
     </div>

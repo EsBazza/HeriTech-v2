@@ -86,7 +86,7 @@ function StudioContent() {
 
   return (
     <div className="relative min-h-full">
-      <div className="px-5 pt-6 pb-8 space-y-4">
+      <div className="px-4 pt-5 pb-8 space-y-4">
 
         {/* ── HERO ── */}
         <div className="hero-panel relative overflow-hidden px-5 py-6" style={{ borderRadius: 24 }}>

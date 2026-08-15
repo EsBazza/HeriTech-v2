@@ -15,7 +15,7 @@ export default function MainLayout({
   return (
     <div className="app-shell-backdrop min-h-screen w-full flex items-center justify-center p-0 sm:px-4 sm:py-6">
       <div
-        className="w-full max-w-[430px] min-h-[100dvh] sm:min-h-[900px] sm:max-h-[94vh] flex flex-col relative overflow-hidden sm:rounded-[44px] soft-panel"
+        className="w-full sm:max-w-[430px] min-h-[100dvh] sm:min-h-[900px] sm:max-h-[94vh] flex flex-col relative overflow-hidden sm:rounded-[44px] soft-panel"
         style={{
           boxShadow:
             "0 0 0 10px rgba(255,255,255,0.65), 0 24px 64px -16px rgba(37,99,235,0.20), 0 16px 40px -12px rgba(15,23,42,0.14)",

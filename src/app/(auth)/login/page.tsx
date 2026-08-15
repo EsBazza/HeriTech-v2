@@ -25,7 +25,7 @@ export default function LoginPage() {
       className="app-shell-backdrop min-h-screen w-full flex items-center justify-center p-4"
     >
       <div
-        className="w-full max-w-[420px] soft-panel rounded-[36px] px-6 pt-10 pb-8"
+        className="w-full max-w-[420px] soft-panel login-card rounded-[36px] px-6 pt-10 pb-8"
         style={{
           boxShadow: "0 0 0 8px rgba(255,255,255,0.6), 0 24px 64px -16px rgba(37,99,235,0.18), 0 16px 40px -12px rgba(15,23,42,0.12)",
         }}
@@ -43,10 +43,10 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-3">
-            <h1 className="text-[28px] font-extrabold tracking-tight text-slate-900 leading-tight">
+            <h1 className="text-[clamp(22px,6vw,28px)] font-extrabold tracking-tight text-slate-900 leading-tight">
               HeriTech
             </h1>
-            <p className="text-[13px] text-slate-500 leading-relaxed font-medium max-w-[280px] mx-auto">
+            <p className="text-[13px] text-slate-500 leading-relaxed font-medium max-w-[260px] mx-auto">
               Circular digital system for festival waste across Asia. Choose your role to continue.
             </p>
           </div>
@@ -59,8 +59,8 @@ export default function LoginPage() {
               key={role}
               id={`login-${role}`}
               onClick={() => handleLogin(role)}
-              className="clay-card flex items-center gap-4 px-5 py-4 text-left transition-all cursor-pointer group"
-              style={{ minHeight: 76, border: "1.5px solid rgba(226,232,240,0.7)" }}
+              className="clay-card flex items-center gap-3 px-4 py-4 text-left transition-all cursor-pointer group"
+              style={{ minHeight: 72, border: "1.5px solid rgba(226,232,240,0.7)" }}
             >
               {/* Emoji orb */}
               <div
@@ -102,14 +102,14 @@ export default function LoginPage() {
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.14em] mb-3">
             🌏 Active Festival Coverage
           </p>
-          <div className="flex justify-center gap-2.5 flex-wrap mb-2">
+          <div className="flex justify-center gap-2 flex-wrap mb-2">
             {["🇹🇷", "🇮🇳", "🇹🇭", "🇹🇼", "🇮🇩", "🇵🇭", "🇯🇵"].map((flag) => (
               <span key={flag} className="text-[22px] transition-transform hover:scale-110">
                 {flag}
               </span>
             ))}
           </div>
-          <p className="text-[10.5px] text-slate-400 font-medium leading-relaxed">
+          <p className="text-[10.5px] text-slate-400 font-medium leading-relaxed text-center">
             Turkey · India · Thailand · Taiwan · Indonesia · Philippines · Japan
           </p>
         </div>

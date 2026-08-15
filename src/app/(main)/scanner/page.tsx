@@ -124,7 +124,7 @@ function ScannerContent() {
 
   return (
     <div className="relative min-h-full">
-      <div className="px-5 pt-6 pb-8 space-y-4">
+      <div className="px-4 pt-5 pb-8 space-y-4">
 
         {/* ── HERO ── */}
         <div className="hero-panel relative overflow-hidden px-5 py-6" style={{ borderRadius: 24 }}>
@@ -165,7 +165,7 @@ function ScannerContent() {
                 key={t.id}
                 id={`scanner-tab-${t.id}`}
                 onClick={() => setTab(t.id as Tab)}
-                className="flex-1 py-2.5 text-[11px] font-extrabold rounded-[16px] transition-all duration-200 cursor-pointer"
+                className="flex-1 py-2 text-[10px] font-extrabold rounded-[14px] transition-all duration-200 cursor-pointer leading-tight px-1"
                 style={{
                   background: tab === t.id ? "#ffffff" : "transparent",
                   color:      tab === t.id ? "#b45309" : "#78350f",

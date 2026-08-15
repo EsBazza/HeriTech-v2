@@ -65,7 +65,7 @@ export default function ImpactPage() {
             </p>
           </div>
 
-          <div className="hero-stats relative z-10">
+          <div className="hero-stats relative z-10" style={{ gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }}>
             {GLOBAL_STAT_CARDS.map((s) => (
               <div key={s.label} className="stat-card">
                 <div className="text-xl mb-1">{s.icon}</div>

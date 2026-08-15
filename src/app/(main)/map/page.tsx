@@ -66,7 +66,7 @@ function MapPageContent() {
     <div className="relative min-h-full">
 
       {/* ── HERO ── */}
-      <div className="px-5 pt-6 pb-5">
+      <div className="px-4 pt-5 pb-5">
         <div className="hero-panel relative overflow-hidden px-5 py-6" style={{ borderRadius: 24 }}>
           <div className="pointer-events-none absolute -top-10 -right-8 w-32 h-32 rounded-full bg-purple-400/08 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-8 -left-8 w-28 h-28 rounded-full bg-emerald-400/07 blur-3xl" />
@@ -126,10 +126,10 @@ function MapPageContent() {
       </div>
 
       {/* ── MAP + LIST ── */}
-      <div className="px-5 pb-8 space-y-4">
+      <div className="px-4 pb-8 space-y-4">
         <div className="section-panel p-4">
           {/* Leaflet map */}
-          <div className="overflow-hidden rounded-[18px] border border-slate-100" style={{ height: 320 }}>
+          <div className="overflow-hidden rounded-[18px] border border-slate-100" style={{ height: "clamp(240px, 45vw, 320px)" }}>
             <MaterialMap batches={filtered} onBatchClick={setSelectedBatch} />
           </div>
         </div>
